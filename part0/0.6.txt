@@ -1,0 +1,15 @@
+title Exercise 0.6
+
+note over browser:
+user fills in the form and clicks save
+browser renders new note
+end note
+
+browser->server: POST /exampleapp/new_note_spa, JSON: { ... }
+
+note over server:
+server adds new note to the list of notes
+end note
+
+server->browser: 201 created, JSON: { "message": "note created" }
+

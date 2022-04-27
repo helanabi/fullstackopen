@@ -1,0 +1,19 @@
+title Exercise 0.5
+
+browser->server: HTTP GET /exampleapp/spa
+server->browser: HTML-code
+browser->server: HTTP GET /exampleapp/main.css
+server->browser: main.css
+browser->server: HTTP GET /exampleapp/spa.js
+server->browser: spa.js
+
+note over browser:
+browser starts executing js-code
+end note
+
+browser->server: HTTP GET /data.json
+server->browser: [{...}, ...]
+
+note over browser:
+browser renders notes on the page
+end note
