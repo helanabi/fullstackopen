@@ -21,10 +21,16 @@ function Content({parts}) {
 }
 
 function Course({ course }) {
+    const total = course
+          .parts
+          .map(part => part.exercises)
+          .reduce((x, y) => x+y);
+    
     return (
         <div>
             <Header course={course.name} />
             <Content parts={course.parts} />
+            <p><b>Total of {total} exercises</b></p>
         </div>
     );  
 }
@@ -48,6 +54,11 @@ function App() {
                 name: "State of a component",
                 exercises: 14,
                 id: 3
+            },
+            {
+                name: "Redux",
+                exercises: 11,
+                id: 4
             }
         ]
     };
