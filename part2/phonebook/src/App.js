@@ -1,5 +1,50 @@
 import { useState } from "react";
 
+const Filter = ({ onChange }) => (
+  <div>
+    <label>
+      Filter shown with &nbsp;
+      <input onChange={onChange} />
+    </label>
+  </div>
+);
+
+const PersonForm = ({
+  onSubmit,
+  newName,
+  onNameChange,
+  newNum,
+  onNumChange,
+}) => (
+  <form onSubmit={onSubmit}>
+    <div>
+      <label>
+        name: &nbsp;
+        <input value={newName} onChange={onNameChange} />
+      </label>
+    </div>
+    <div>
+      <label>
+        number: &nbsp;
+        <input value={newNum} onChange={onNumChange} />
+      </label>
+    </div>
+    <div>
+      <button>Add</button>
+    </div>
+  </form>
+);
+
+const Persons = ({ persons }) => (
+  <ul>
+    {persons.map(person => (
+      <li key={person.name}>
+        {person.name} {person.num}
+      </li>
+    ))}
+  </ul>
+);
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: "Arto Hellas", num: "040-1234567", id: 1 },
@@ -31,39 +76,19 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        <label>
-          Filter shown with &nbsp;
-          <input onChange={setValue(setFilter)} />
-        </label>
-      </div>
-      <h2>Add a new</h2>
-      <form onSubmit={submitHandler}>
-        <div>
-          <label>
-            name: &nbsp;
-            <input value={newName} onChange={setValue(setNewName)} />
-          </label>
-        </div>
-        <div>
-          <label>
-            number: &nbsp;
-            <input value={newNum} onChange={setValue(setNewNum)} />
-          </label>
-        </div>
-        <div>
-          <button>Add</button>
-        </div>
-      </form>
+      <Filter onChange={setValue(setFilter)} />
+
+      <h3>Add a new</h3>
+      <PersonForm
+        onSubmit={submitHandler}
+        newName={newName}
+        onNameChange={setValue(setNewName)}
+        newNum={newNum}
+        onNumChange={setValue(setNewNum)}
+      />
+
       <h2>Numbers</h2>
-      <ul>
-        {shownPersons.map(person => (
-          <li key={person.name}>
-            {person.name} {person.num}
-          </li>
-        ))}
-      </ul>
-      <div>Debug: {newName}</div>
+      <Persons persons={shownPersons} />
     </div>
   );
 };
