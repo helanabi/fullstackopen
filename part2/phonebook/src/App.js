@@ -1,4 +1,5 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const Filter = ({ onChange }) => (
   <div>
@@ -39,22 +40,23 @@ const Persons = ({ persons }) => (
   <ul>
     {persons.map(person => (
       <li key={person.name}>
-        {person.name} {person.num}
+        {person.name} {person.number}
       </li>
     ))}
   </ul>
 );
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", num: "040-1234567", id: 1 },
-    { name: "Ada Lovelace", num: "39-44-5323523", id: 2 },
-    { name: "Dan Abramov", num: "12-43-234345", id: 3 },
-    { name: "Mary Peppendieck", num: "39-23-6423122", id: 4 },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNum, setNewNum] = useState("");
   const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/persons")
+      .then(resp => setPersons(resp.data));
+  }, []);
 
   const setValue = setter => event => setter(event.target.value);
 
@@ -64,7 +66,7 @@ const App = () => {
       alert(`${newName} is already added to phonebook`);
       return;
     }
-    setPersons(persons.concat({ name: newName, num: newNum }));
+    setPersons(persons.concat({ name: newName, number: newNum }));
     setNewName("");
     setNewNum("");
   };
