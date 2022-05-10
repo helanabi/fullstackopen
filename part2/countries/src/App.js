@@ -51,7 +51,12 @@ function App() {
           filteredCountries.map(country => (
             <span key={country.name.common}>
               <br />
-              {country.name.common}
+              {country.name.common}{" "}
+              <button
+                onClick={() => setFilter(country.name.common.toLowerCase())}
+              >
+                Show
+              </button>
             </span>
           ))
         ) : filteredCountries.length === 1 ? (
