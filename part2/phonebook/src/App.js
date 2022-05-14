@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import personService from "./services/persons";
 
-const Notification = ({ msg }) => msg && <p className="sucess">{msg}</p>;
+const Notification = ({ msg }) =>
+  msg && <p className={`notif ${msg.type}`}>{msg.content}</p>;
 
 const Filter = ({ onChange }) => (
   <div>
@@ -54,15 +55,15 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNum, setNewNum] = useState("");
   const [filter, setFilter] = useState("");
-  const [msg, setMsg] = useState("");
+  const [msg, setMsg] = useState(null);
 
   useEffect(() => {
     personService.getAll().then(initialPersons => setPersons(initialPersons));
   }, []);
 
-  const showMsg = (msg, ms = 5000) => {
-    setMsg(msg);
-    setTimeout(() => setMsg(""), ms);
+  const showMsg = (content, type = "success", ms = 5000) => {
+    setMsg({ content, type });
+    setTimeout(() => setMsg(null), ms);
   };
 
   const setValue = setter => event => setter(event.target.value);
@@ -84,6 +85,14 @@ const App = () => {
             setPersons(
               persons.map(p => (p.id === existingPerson.id ? updatedPerson : p))
             );
+          })
+          .catch(() => {
+            showMsg(
+              `Information about ${existingPerson.name}` +
+                " has already been removed from server",
+              "error"
+            );
+            setPersons(persons.filter(p => p.id !== existingPerson.id));
           });
       } else return;
     } else {

@@ -1,9 +1,16 @@
-.sucess {
-  color: green;
+.notif {
   border-style: solid;
   background-color: #ddd;
   padding: 1rem;
   font-size: 1.2rem;
   font-weight: bold;
   border-radius: 0.5rem;
+}
+
+.success {
+  color: green;
+}
+
+.error {
+  color: red;
 }
