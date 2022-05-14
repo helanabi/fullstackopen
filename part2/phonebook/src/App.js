@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import personService from "./services/persons";
 
+const Notification = ({ msg }) => msg && <p className="sucess">{msg}</p>;
+
 const Filter = ({ onChange }) => (
   <div>
     <label>
@@ -52,10 +54,16 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNum, setNewNum] = useState("");
   const [filter, setFilter] = useState("");
+  const [msg, setMsg] = useState("");
 
   useEffect(() => {
     personService.getAll().then(initialPersons => setPersons(initialPersons));
   }, []);
+
+  const showMsg = (msg, ms = 5000) => {
+    setMsg(msg);
+    setTimeout(() => setMsg(""), ms);
+  };
 
   const setValue = setter => event => setter(event.target.value);
 
@@ -71,16 +79,20 @@ const App = () => {
       ) {
         personService
           .replace(existingPerson.id, { ...existingPerson, number: newNum })
-          .then(updatedPerson =>
+          .then(updatedPerson => {
+            showMsg(`Updated ${updatedPerson.name}`);
             setPersons(
               persons.map(p => (p.id === existingPerson.id ? updatedPerson : p))
-            )
-          );
+            );
+          });
       } else return;
     } else {
       personService
         .create({ name: newName, number: newNum })
-        .then(createdPerson => setPersons(persons.concat(createdPerson)));
+        .then(createdPerson => {
+          showMsg(`Added ${createdPerson.name}`);
+          setPersons(persons.concat(createdPerson));
+        });
     }
     setNewName("");
     setNewNum("");
@@ -103,6 +115,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification msg={msg} />
       <Filter onChange={setValue(setFilter)} />
 
       <h3>Add a new</h3>
