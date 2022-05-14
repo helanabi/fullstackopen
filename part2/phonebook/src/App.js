@@ -61,15 +61,27 @@ const App = () => {
 
   const submitHandler = event => {
     event.preventDefault();
-    if (persons.find(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`);
-      return;
+    let existingPerson = persons.find(p => p.name === newName);
+    if (existingPerson) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook,` +
+            " replace the old number with a new one?"
+        )
+      ) {
+        personService
+          .replace(existingPerson.id, { ...existingPerson, number: newNum })
+          .then(updatedPerson =>
+            setPersons(
+              persons.map(p => (p.id === existingPerson.id ? updatedPerson : p))
+            )
+          );
+      } else return;
+    } else {
+      personService
+        .create({ name: newName, number: newNum })
+        .then(createdPerson => setPersons(persons.concat(createdPerson)));
     }
-
-    personService
-      .create({ name: newName, number: newNum })
-      .then(createdPerson => setPersons(persons.concat(createdPerson)));
-
     setNewName("");
     setNewNum("");
   };
