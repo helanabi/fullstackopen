@@ -1,0 +1,8 @@
+### Get all notes
+GET http://localhost:3001/api/persons
+
+### Get note 2
+GET http://localhost:3001/api/persons/2
+
+### Get note 999
+GET http://localhost:3001/api/persons/999
