@@ -25,6 +25,13 @@ const initialPersons = [
   },
 ];
 
+app.get("/info", (_req, res) =>
+  res.send(
+    `<p>Phonebook has info for ${initialPersons.length} people</p>` +
+      `<p>${new Date()}`
+  )
+);
+
 app.get("/api/persons", (_req, res) => res.json(initialPersons));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
