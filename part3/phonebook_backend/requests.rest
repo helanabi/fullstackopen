@@ -1,8 +1,20 @@
-### Get all notes
+### Get all people
 GET http://localhost:3001/api/persons
 
-### Get note 2
+### Get person 2
 GET http://localhost:3001/api/persons/2
 
-### Get note 999
+### Get person 999
 GET http://localhost:3001/api/persons/999
+
+### Delete person 3
+DELETE http://localhost:3001/api/persons/3
+
+### Add new person
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "New Lad",
+    "number": "01-02-3456789"
+}

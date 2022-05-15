@@ -1,6 +1,9 @@
 const express = require("express");
+const { generateId } = require("./utils");
 const app = express();
 const PORT = 3001;
+
+app.use(express.json());
 
 const initialPersons = [
   {
@@ -46,6 +49,13 @@ app.delete("/api/persons/:id", (req, res) => {
     1
   );
   res.status(204).end();
+});
+
+app.post("/api/persons", (req, res) => {
+  const { name, number } = req.body;
+  const newPerson = { id: generateId(initialPersons), name, number };
+  initialPersons.push(newPerson);
+  res.json(newPerson);
 });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
