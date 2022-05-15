@@ -1,3 +1,4 @@
+const { response } = require("express");
 const express = require("express");
 const { generateId } = require("./utils");
 const app = express();
@@ -53,6 +54,12 @@ app.delete("/api/persons/:id", (req, res) => {
 
 app.post("/api/persons", (req, res) => {
   const { name, number } = req.body;
+  if (!name || !number)
+    return res.status(400).json({ error: "content missing" });
+
+  if (initialPersons.find(p => p.name === name))
+    return res.status(400).json({ error: "name must be unique" });
+
   const newPerson = { id: generateId(initialPersons), name, number };
   initialPersons.push(newPerson);
   res.json(newPerson);
