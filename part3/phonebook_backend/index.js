@@ -78,12 +78,7 @@ app.post("/api/persons", (req, res) => {
   if (!name || !number)
     return res.status(400).json({ error: "content missing" });
 
-  if (initialPersons.find((p) => p.name === name))
-    return res.status(400).json({ error: "name must be unique" });
-
-  const newPerson = { id: generateId(initialPersons), name, number };
-  initialPersons.push(newPerson);
-  res.json(newPerson);
+  new Person({ name, number }).save().then((person) => res.json(person));
 });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
