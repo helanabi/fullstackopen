@@ -1,6 +1,8 @@
+require("dotenv").config();
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const Person = require("./models/person");
 const { generateId } = require("./utils");
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -53,17 +55,19 @@ app.get("/info", (_req, res) =>
   )
 );
 
-app.get("/api/persons", (_req, res) => res.json(initialPersons));
+app.get("/api/persons", (_req, res) =>
+  Person.find({}).then((persons) => res.json(persons))
+);
 
 app.get("/api/persons/:id", (req, res) => {
-  const person = initialPersons.find(p => p.id === Number(req.params.id));
+  const person = initialPersons.find((p) => p.id === Number(req.params.id));
   if (person) res.json(person);
   else res.status(404).end();
 });
 
 app.delete("/api/persons/:id", (req, res) => {
   initialPersons.splice(
-    initialPersons.findIndex(p => p.id === Number(req.params.id)),
+    initialPersons.findIndex((p) => p.id === Number(req.params.id)),
     1
   );
   res.status(204).end();
@@ -74,7 +78,7 @@ app.post("/api/persons", (req, res) => {
   if (!name || !number)
     return res.status(400).json({ error: "content missing" });
 
-  if (initialPersons.find(p => p.name === name))
+  if (initialPersons.find((p) => p.name === name))
     return res.status(400).json({ error: "name must be unique" });
 
   const newPerson = { id: generateId(initialPersons), name, number };
