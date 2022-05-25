@@ -3,7 +3,6 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const Person = require("./models/person");
-const { generateId } = require("./utils");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -55,8 +54,10 @@ app.get("/info", (_req, res) =>
   )
 );
 
-app.get("/api/persons", (_req, res) =>
-  Person.find({}).then((persons) => res.json(persons))
+app.get("/api/persons", (_req, res, next) =>
+  Person.find({})
+    .then((persons) => res.json(persons))
+    .catch((err) => next(err))
 );
 
 app.get("/api/persons/:id", (req, res) => {
@@ -65,16 +66,27 @@ app.get("/api/persons/:id", (req, res) => {
   else res.status(404).end();
 });
 
-app.delete("/api/persons/:id", (req, res) => {
-  Person.findByIdAndRemove(req.params.id).then((_) => res.status(204).end());
+app.delete("/api/persons/:id", (req, res, next) => {
+  Person.findByIdAndRemove(req.params.id)
+    .then((_) => res.status(204).end())
+    .catch((err) => next(err));
 });
 
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
   const { name, number } = req.body;
   if (!name || !number)
     return res.status(400).json({ error: "content missing" });
 
-  new Person({ name, number }).save().then((person) => res.json(person));
+  new Person({ name, number })
+    .save()
+    .then((person) => res.json(person))
+    .catch((err) => next(err));
+});
+
+app.use((err, req, res, next) => {
+  console.error(`${err.name}: ${err.message}`);
+  if (err.name === "CastError") res.status(400).send({ error: "Malformed id" });
+  next(err);
 });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
