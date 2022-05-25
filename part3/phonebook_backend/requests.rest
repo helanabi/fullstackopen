@@ -7,8 +7,8 @@ GET http://localhost:3001/api/persons/2
 ### Get person 999
 GET http://localhost:3001/api/persons/999
 
-### Delete person 3
-DELETE http://localhost:3001/api/persons/3
+### Delete person 628d71056f82f33f201096dd
+DELETE http://localhost:3001/api/persons/628d71056f82f33f201096dd
 
 ### Add new person
 POST http://localhost:3001/api/persons

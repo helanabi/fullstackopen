@@ -66,11 +66,7 @@ app.get("/api/persons/:id", (req, res) => {
 });
 
 app.delete("/api/persons/:id", (req, res) => {
-  initialPersons.splice(
-    initialPersons.findIndex((p) => p.id === Number(req.params.id)),
-    1
-  );
-  res.status(204).end();
+  Person.findByIdAndRemove(req.params.id).then((_) => res.status(204).end());
 });
 
 app.post("/api/persons", (req, res) => {
