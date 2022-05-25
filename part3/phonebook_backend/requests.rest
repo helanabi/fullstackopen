@@ -16,7 +16,7 @@ Content-Type: application/json
 
 {
     "name": "New Lad",
-    "number": "01-02-3456789"
+    "number": "22-334455"
 }
 
 ### Update a person

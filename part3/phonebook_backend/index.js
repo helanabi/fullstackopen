@@ -55,12 +55,15 @@ app.delete("/api/persons/:id", (req, res, next) => {
     .catch((err) => next(err));
 });
 
-app.post("/api/persons", (req, res, next) => {
+app.post("/api/persons", async (req, res, next) => {
   const { name, number } = req.body;
-  new Person({ name, number })
-    .save()
-    .then((person) => res.json(person))
-    .catch((err) => next(err));
+  try {
+    if (await Person.exists({ name }))
+      res.status(400).send({ error: "Name exists in phonbook" });
+    else res.json(await new Person({ name, number }).save());
+  } catch (err) {
+    next(err);
+  }
 });
 
 app.put("/api/persons/:id", (req, res, next) =>
