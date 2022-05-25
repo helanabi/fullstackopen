@@ -57,9 +57,6 @@ app.delete("/api/persons/:id", (req, res, next) => {
 
 app.post("/api/persons", (req, res, next) => {
   const { name, number } = req.body;
-  if (!name || !number)
-    return res.status(400).json({ error: "content missing" });
-
   new Person({ name, number })
     .save()
     .then((person) => res.json(person))
@@ -73,7 +70,7 @@ app.put("/api/persons/:id", (req, res, next) =>
       name: req.body.name,
       number: req.body.number,
     },
-    { new: true }
+    { new: true, runValidators: true }
   )
     .then((person) => res.json(person))
     .catch((err) => next(err))
@@ -81,7 +78,11 @@ app.put("/api/persons/:id", (req, res, next) =>
 
 app.use((err, req, res, next) => {
   console.error(`${err.name}: ${err.message}`);
-  if (err.name === "CastError") res.status(400).send({ error: "Malformed id" });
+  if (err.name === "CastError")
+    return res.status(400).send({ err: "Malformed id" });
+  else if (err.name === "ValidationError")
+    return res.status(400).send({ error: err.message });
+
   next(err);
 });
 

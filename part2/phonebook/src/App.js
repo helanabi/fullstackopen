@@ -41,7 +41,7 @@ const PersonForm = ({
 
 const Persons = ({ persons, removePerson }) => (
   <ul>
-    {persons.map(person => (
+    {persons.map((person) => (
       <li key={person.name}>
         {person.name} {person.number}{" "}
         <button onClick={() => removePerson(person.id)}>remove</button>
@@ -58,7 +58,7 @@ const App = () => {
   const [msg, setMsg] = useState(null);
 
   useEffect(() => {
-    personService.getAll().then(initialPersons => setPersons(initialPersons));
+    personService.getAll().then((initialPersons) => setPersons(initialPersons));
   }, []);
 
   const showMsg = (content, type = "success", ms = 5000) => {
@@ -66,11 +66,11 @@ const App = () => {
     setTimeout(() => setMsg(null), ms);
   };
 
-  const setValue = setter => event => setter(event.target.value);
+  const setValue = (setter) => (event) => setter(event.target.value);
 
-  const submitHandler = event => {
+  const submitHandler = (event) => {
     event.preventDefault();
-    let existingPerson = persons.find(p => p.name === newName);
+    let existingPerson = persons.find((p) => p.name === newName);
     if (existingPerson) {
       if (
         window.confirm(
@@ -80,10 +80,12 @@ const App = () => {
       ) {
         personService
           .replace(existingPerson.id, { ...existingPerson, number: newNum })
-          .then(updatedPerson => {
+          .then((updatedPerson) => {
             showMsg(`Updated ${updatedPerson.name}`);
             setPersons(
-              persons.map(p => (p.id === existingPerson.id ? updatedPerson : p))
+              persons.map((p) =>
+                p.id === existingPerson.id ? updatedPerson : p
+              )
             );
           })
           .catch(() => {
@@ -92,32 +94,33 @@ const App = () => {
                 " has already been removed from server",
               "error"
             );
-            setPersons(persons.filter(p => p.id !== existingPerson.id));
+            setPersons(persons.filter((p) => p.id !== existingPerson.id));
           });
       } else return;
     } else {
       personService
         .create({ name: newName, number: newNum })
-        .then(createdPerson => {
+        .then((createdPerson) => {
           showMsg(`Added ${createdPerson.name}`);
           setPersons(persons.concat(createdPerson));
-        });
+        })
+        .catch((res) => showMsg(res.response.data.error, "error", 10000));
     }
     setNewName("");
     setNewNum("");
   };
 
-  const shownPersons = persons.filter(person =>
+  const shownPersons = persons.filter((person) =>
     person.name.toLowerCase().includes(filter.toLowerCase())
   );
 
-  const removePerson = id => {
-    const person = persons.find(p => p.id === id);
+  const removePerson = (id) => {
+    const person = persons.find((p) => p.id === id);
 
     if (window.confirm(`Delete ${person.name}?`)) {
       personService
         .remove(id)
-        .then(() => setPersons(persons.filter(p => p.id !== id)));
+        .then(() => setPersons(persons.filter((p) => p.id !== id)));
     }
   };
 
