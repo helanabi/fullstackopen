@@ -1,8 +1,8 @@
 ### Get all people
 GET http://localhost:3001/api/persons
 
-### Get person 2
-GET http://localhost:3001/api/persons/2
+### Get a person
+GET http://localhost:3001/api/persons/628d10e0e826fdc0951b93ed
 
 ### Get person 999
 GET http://localhost:3001/api/persons/999

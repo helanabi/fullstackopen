@@ -24,34 +24,14 @@ app.use(
   )
 );
 
-const initialPersons = [
-  {
-    id: 1,
-    name: "Arto Hellas",
-    number: "040-123456",
-  },
-  {
-    id: 2,
-    name: "Ada Lovelace",
-    number: "39-44-5323523",
-  },
-  {
-    id: 3,
-    name: "Dan Abramov",
-    number: "12-43-234345",
-  },
-  {
-    id: 4,
-    name: "Mary Poppendieck",
-    number: "39-23-6423122",
-  },
-];
-
-app.get("/info", (_req, res) =>
-  res.send(
-    `<p>Phonebook has info for ${initialPersons.length} people</p>` +
-      `<p>${new Date()}`
-  )
+app.get("/info", (_req, res, next) =>
+  Person.countDocuments({})
+    .then((count) =>
+      res.send(
+        `<p>Phonebook has info for ${count} people</p>` + `<p>${new Date()}`
+      )
+    )
+    .catch((err) => next(err))
 );
 
 app.get("/api/persons", (_req, res, next) =>
@@ -60,11 +40,14 @@ app.get("/api/persons", (_req, res, next) =>
     .catch((err) => next(err))
 );
 
-app.get("/api/persons/:id", (req, res) => {
-  const person = initialPersons.find((p) => p.id === Number(req.params.id));
-  if (person) res.json(person);
-  else res.status(404).end();
-});
+app.get("/api/persons/:id", (req, res, next) =>
+  Person.findById(req.params.id)
+    .then((person) => {
+      if (person) res.json(person);
+      else res.status(404).end();
+    })
+    .catch((err) => next(err))
+);
 
 app.delete("/api/persons/:id", (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
