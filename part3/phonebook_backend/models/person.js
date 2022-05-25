@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 mongoose
   .connect(process.env.MONGODB_URI)
-  .then((_) =>
+  .then(() =>
     console.log(`Connected to MongoDB at ${mongoose.connection.host}`)
   )
   .catch((err) => console.error("Could not connect to MongoDB: ", err.message));
