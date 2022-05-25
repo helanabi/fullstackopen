@@ -18,3 +18,12 @@ Content-Type: application/json
     "name": "New Lad",
     "number": "01-02-3456789"
 }
+
+### Update a person
+PUT http://localhost:3001/api/persons/628d113b8ede2a222c64b509
+Content-Type: application/json
+
+{
+    "name": "Arto Vihavainen",
+    "number": "055-1232456"
+}
