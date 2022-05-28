@@ -105,3 +105,23 @@ describe("mostBlogs", () => {
     });
   });
 });
+
+describe("mostLikes", () => {
+  test("of empty list is null", () => {
+    expect(listHelper.mostLikes([])).toBe(null);
+  });
+
+  test("of signleton list", () => {
+    expect(listHelper.mostLikes([testList[0]])).toEqual({
+      author: "Michael Chan",
+      likes: 7,
+    });
+  });
+
+  test("of multi-blog list", () => {
+    expect(listHelper.mostLikes(testList)).toEqual({
+      author: "Edsger W. Dijkstra",
+      likes: 17,
+    });
+  });
+});

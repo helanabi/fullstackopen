@@ -7,20 +7,36 @@ const favoriteBlog = (blogs) =>
   blogs.find((blog) => blog.likes === Math.max(...blogs.map((b) => b.likes))) ||
   null;
 
-const mostBlogs = (blogs) => {
-  const authors = blogs.reduce(
-    (authors, blog) => ({
-      ...authors,
-      [blog.author]: (authors[blog.author] || 0) + 1,
+const groupBy = (arr, prop, getter) =>
+  arr.reduce(
+    (props, item) => ({
+      ...props,
+      [item[prop]]: (props[item[prop]] || 0) + getter(item),
     }),
-    []
+    {}
   );
 
-  return Object.entries(authors).reduce(
-    (max, [author, blogs]) =>
-      max && max.blogs >= blogs ? max : { author, blogs },
+const topEntry = (obj, keyLabel, valueLabel) =>
+  Object.entries(obj).reduce(
+    (max, [key, value]) =>
+      max && max[valueLabel] >= value
+        ? max
+        : { [keyLabel]: key, [valueLabel]: value },
     null
   );
-};
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
+const mostBlogs = (blogs) =>
+  topEntry(
+    groupBy(blogs, "author", () => 1),
+    "author",
+    "blogs"
+  );
+
+const mostLikes = (blogs) =>
+  topEntry(
+    groupBy(blogs, "author", (blog) => blog.likes),
+    "author",
+    "likes"
+  );
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes };
