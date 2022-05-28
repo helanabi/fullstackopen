@@ -7,4 +7,20 @@ const favoriteBlog = (blogs) =>
   blogs.find((blog) => blog.likes === Math.max(...blogs.map((b) => b.likes))) ||
   null;
 
-module.exports = { dummy, totalLikes, favoriteBlog };
+const mostBlogs = (blogs) => {
+  const authors = blogs.reduce(
+    (authors, blog) => ({
+      ...authors,
+      [blog.author]: (authors[blog.author] || 0) + 1,
+    }),
+    []
+  );
+
+  return Object.entries(authors).reduce(
+    (max, [author, blogs]) =>
+      max && max.blogs >= blogs ? max : { author, blogs },
+    null
+  );
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };

@@ -85,3 +85,23 @@ describe("favoriteBlog", () => {
     expect(listHelper.favoriteBlog(testList)).toBe(testList[2]);
   });
 });
+
+describe("mostBlogs", () => {
+  test("of empty list is null", () => {
+    expect(listHelper.mostBlogs([])).toBe(null);
+  });
+
+  test("of signleton list", () => {
+    expect(listHelper.mostBlogs([testList[0]])).toEqual({
+      author: "Michael Chan",
+      blogs: 1,
+    });
+  });
+
+  test("of multi-blog list", () => {
+    expect(listHelper.mostBlogs(testList)).toEqual({
+      author: "Robert C. Martin",
+      blogs: 3,
+    });
+  });
+});
