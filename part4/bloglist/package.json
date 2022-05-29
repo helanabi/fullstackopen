@@ -4,8 +4,8 @@
   "description": "Blog list application",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
-    "test": "jest ."
+    "start": "NODE_ENV=development nodemon index.js",
+    "test": "NODE_ENV=testing jest --verbose --runInBand --detectOpenHandles"
   },
   "author": "Hassan El annabi",
   "license": "ISC",
@@ -13,7 +13,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
-    "mongoose": "^6.3.4"
+    "mongoose": "^6.3.4",
+    "supertest": "^6.2.3"
   },
   "devDependencies": {
     "jest": "^28.1.0",
