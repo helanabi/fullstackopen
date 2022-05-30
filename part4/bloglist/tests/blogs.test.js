@@ -70,3 +70,14 @@ test("Respond with 400 to blogs missing title/url", async () => {
     })
     .expect(400);
 });
+
+test("A blog can be deleted", async () => {
+  const blogsBefore = await api.get("/api/blogs");
+  const blogToDelete = blogsBefore.body[0];
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+  const blogsAfter = await api.get("/api/blogs");
+  expect(blogsAfter.body).toHaveLength(blogsBefore.body.length - 1);
+  expect(blogsAfter.body.map((b) => b.title)).not.toContain(blogToDelete.title);
+});
