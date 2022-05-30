@@ -23,3 +23,8 @@ test("Fetch all blogs", async () => {
 
   expect(blogsFromApi.body).toHaveLength(blogsFromDB.length);
 });
+
+test("Blog posts have an 'id' property", async () => {
+  const blogs = await api.get("/api/blogs").expect(200);
+  expect(blogs.body[0].id).toBeDefined();
+});
