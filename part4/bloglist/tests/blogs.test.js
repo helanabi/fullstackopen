@@ -60,3 +60,13 @@ test("'likes' property defaults to 0", async () => {
 
   expect(blog.body.likes).toBe(0);
 });
+
+test("Respond with 400 to blogs missing title/url", async () => {
+  await api
+    .post("/api/blogs")
+    .send({
+      author: "No One",
+      likes: 0,
+    })
+    .expect(400);
+});
