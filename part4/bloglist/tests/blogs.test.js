@@ -29,7 +29,7 @@ test("Blog posts have an 'id' property", async () => {
   expect(blogs.body[0].id).toBeDefined();
 });
 
-test("A new blog post can be created", async () => {
+test("Create a new blog post", async () => {
   const blogsBefore = (await api.get("/api/blogs")).body;
   const title = "An example blog post";
 
@@ -71,7 +71,7 @@ test("Respond with 400 to blogs missing title/url", async () => {
     .expect(400);
 });
 
-test("A blog can be deleted", async () => {
+test("Delete a blog post", async () => {
   const blogsBefore = await api.get("/api/blogs");
   const blogToDelete = blogsBefore.body[0];
 
@@ -80,4 +80,16 @@ test("A blog can be deleted", async () => {
   const blogsAfter = await api.get("/api/blogs");
   expect(blogsAfter.body).toHaveLength(blogsBefore.body.length - 1);
   expect(blogsAfter.body.map((b) => b.title)).not.toContain(blogToDelete.title);
+});
+
+test("Increment a blog's number of likes", async () => {
+  const blogs = await api.get("/api/blogs");
+  const blogToUpdate = blogs.body[0];
+
+  const updatedBlog = await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send({ ...blogToUpdate, likes: blogToUpdate.likes + 1 })
+    .expect(200);
+
+  expect(updatedBlog.body.likes).toBe(blogToUpdate.likes + 1);
 });
