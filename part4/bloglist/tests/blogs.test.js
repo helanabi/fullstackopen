@@ -47,3 +47,16 @@ test("A new blog post can be created", async () => {
   expect(blogsAfter).toHaveLength(blogsBefore.length + 1);
   expect(blogsAfter.map((b) => b.title)).toContain(title);
 });
+
+test("'likes' property defaults to 0", async () => {
+  const blog = await api
+    .post("/api/blogs")
+    .send({
+      title: "An example blog post",
+      author: "No One",
+      url: "https://www.example.com",
+    })
+    .expect(201);
+
+  expect(blog.body.likes).toBe(0);
+});
