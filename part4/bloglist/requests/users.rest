@@ -1,0 +1,12 @@
+### Fetch all users
+GET http://localhost:3003/api/users
+
+### Add a user
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "helanabi",
+  "name": "Hassan El anabi",
+  "password": "helanabipwd"
+}
