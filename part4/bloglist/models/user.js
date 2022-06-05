@@ -15,6 +15,7 @@ module.exports = mongoose.model(
         type: String,
         required: true,
       },
+      blogs: [{ type: mongoose.SchemaTypes.ObjectId, ref: "Blog" }],
     },
     {
       toJSON: {

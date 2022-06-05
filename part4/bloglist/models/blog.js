@@ -15,9 +15,19 @@ const blogSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    user: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "User",
+    },
   },
   {
-    toJSON: { virtuals: true },
+    toJSON: {
+      virtuals: true,
+      versionKey: false,
+      transform: (_doc, ret) => {
+        delete ret._id;
+      },
+    },
   }
 );
 
