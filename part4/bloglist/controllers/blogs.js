@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+const config = require("../utils/config");
 const Blog = require("../models/blog");
 const User = require("../models/user");
 const blogRouter = require("express").Router();
@@ -7,15 +9,23 @@ blogRouter.get("/", async (_, response) => {
 });
 
 blogRouter.post("/", async (request, response) => {
-  const arbitraryUser = await User.findOne();
+  const [scheme, token] = request.get("authorization").split(" ");
+
+  if (scheme.toLocaleLowerCase() !== "bearer")
+    return response.status(401).json({
+      error: "Invalid authentication scheme",
+    });
+
+  const payload = jwt.verify(token, config.JWT_SECRET);
+  const user = await User.findById(payload.id);
 
   const blog = await new Blog({
     ...request.body,
-    user: arbitraryUser._id,
+    user: user._id,
   }).save();
 
-  arbitraryUser.blogs.push(blog._id);
-  await arbitraryUser.save();
+  user.blogs.push(blog._id);
+  await user.save();
 
   response.status(201).json(blog);
 });

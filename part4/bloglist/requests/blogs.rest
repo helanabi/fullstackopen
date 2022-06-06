@@ -4,9 +4,10 @@ GET http://localhost:3003/api/blogs
 ### Add a blog
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOWNiZTAzNWE2MTg2MWUxNWViMGJmMCIsImlhdCI6MTY1NDQ5OTk3Nn0.fSfam3GxutzsUGe-NWLrVOQi_5ujBRY146BBG8ye_xA
 
 {
-    "title": "Test blog3",
+    "title": "Test blog4",
     "author": "unknown",
     "url": "https://example.com",
     "likes": 0
