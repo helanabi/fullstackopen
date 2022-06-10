@@ -22,4 +22,18 @@ const errorHandler = (err, _req, res, next) => {
   next(err);
 };
 
-module.exports = { errorHandler };
+const tokenExtractor = (req, res, next) => {
+  const auth = req.get("authorization");
+  if (auth) {
+    const [scheme, token] = auth.split(" ");
+
+    if (scheme.toLocaleLowerCase() !== "bearer")
+      return res.status(401).json({
+        error: "Invalid authentication scheme",
+      });
+    else req.token = token;
+  }
+  next();
+};
+
+module.exports = { errorHandler, tokenExtractor };

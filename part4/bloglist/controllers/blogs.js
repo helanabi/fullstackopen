@@ -9,14 +9,7 @@ blogRouter.get("/", async (_, response) => {
 });
 
 blogRouter.post("/", async (request, response) => {
-  const [scheme, token] = request.get("authorization").split(" ");
-
-  if (scheme.toLocaleLowerCase() !== "bearer")
-    return response.status(401).json({
-      error: "Invalid authentication scheme",
-    });
-
-  const payload = jwt.verify(token, config.JWT_SECRET);
+  const payload = jwt.verify(request.token, config.JWT_SECRET);
   const user = await User.findById(payload.id);
 
   const blog = await new Blog({
