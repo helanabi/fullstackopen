@@ -4,15 +4,15 @@ GET http://localhost:3003/api/blogs
 ### Add a blog
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOWNiZTAzNWE2MTg2MWUxNWViMGJmMCIsImlhdCI6MTY1NDQ5OTk3Nn0.fSfam3GxutzsUGe-NWLrVOQi_5ujBRY146BBG8ye_xA
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOWQzYzEwNzNhZTQ2MWRkZDhlYmJiNyIsImlhdCI6MTY1NDk0NzcyNn0.pyo_tiuEKFDrJt1FlIVsPY6WtkaiFaZU-3SThfcl_KM
 
 {
-    "title": "Test blog5",
+    "title": "Test blog6",
     "author": "unknown",
     "url": "https://example.com",
     "likes": 0
 }
 
 ### Delete a blog
-DELETE http://localhost:3003/api/blogs/62a3d0054a926b1a7ee51cfb
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOWNiZTAzNWE2MTg2MWUxNWViMGJmMCIsImlhdCI6MTY1NDQ5OTk3Nn0.fSfam3GxutzsUGe-NWLrVOQi_5ujBRY146BBG8ye_xA
+DELETE http://localhost:3003/api/blogs/629d3705da059f4975a03f1c
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOWQzYzEwNzNhZTQ2MWRkZDhlYmJiNyIsImlhdCI6MTY1NDk0NzI5MX0.ituKt-05i8w5RPOrgsIsOo9hkaqiVjISrokKXZmqUdE

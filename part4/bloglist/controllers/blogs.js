@@ -9,8 +9,7 @@ blogRouter.get("/", async (_, response) => {
 });
 
 blogRouter.post("/", async (request, response) => {
-  const payload = jwt.verify(request.token, config.JWT_SECRET);
-  const user = await User.findById(payload.id);
+  const user = await User.findById(request.user);
 
   const blog = await new Blog({
     ...request.body,
@@ -24,10 +23,11 @@ blogRouter.post("/", async (request, response) => {
 });
 
 blogRouter.delete("/:id", async (request, response) => {
-  const payload = jwt.verify(request.token, config.JWT_SECRET);
   const blog = await Blog.findById(request.params.id);
 
-  if (payload.id !== blog.user.toString())
+  if (!blog) return response.status(404).end();
+
+  if (request.user !== blog.user.toString())
     return response.status(401).json({
       error: "insufficient privileges",
     });
