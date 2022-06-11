@@ -12,3 +12,7 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOWNiZTAzN
     "url": "https://example.com",
     "likes": 0
 }
+
+### Delete a blog
+DELETE http://localhost:3003/api/blogs/62a3d0054a926b1a7ee51cfb
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOWNiZTAzNWE2MTg2MWUxNWViMGJmMCIsImlhdCI6MTY1NDQ5OTk3Nn0.fSfam3GxutzsUGe-NWLrVOQi_5ujBRY146BBG8ye_xA

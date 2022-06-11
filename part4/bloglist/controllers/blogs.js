@@ -24,7 +24,15 @@ blogRouter.post("/", async (request, response) => {
 });
 
 blogRouter.delete("/:id", async (request, response) => {
-  await Blog.findByIdAndDelete(request.params.id);
+  const payload = jwt.verify(request.token, config.JWT_SECRET);
+  const blog = await Blog.findById(request.params.id);
+
+  if (payload.id !== blog.user.toString())
+    return response.status(401).json({
+      error: "insufficient privileges",
+    });
+
+  await blog.remove();
   response.status(204).end();
 });
 
