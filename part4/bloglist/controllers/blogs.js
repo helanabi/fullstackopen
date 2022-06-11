@@ -9,6 +9,11 @@ blogRouter.get("/", async (_, response) => {
 });
 
 blogRouter.post("/", async (request, response) => {
+  if (!request.user)
+    return response.status(401).json({
+      error: "token is missing",
+    });
+
   const user = await User.findById(request.user);
 
   const blog = await new Blog({
@@ -23,6 +28,11 @@ blogRouter.post("/", async (request, response) => {
 });
 
 blogRouter.delete("/:id", async (request, response) => {
+  if (!request.user)
+    return response.status(401).json({
+      error: "token is missing",
+    });
+
   const blog = await Blog.findById(request.params.id);
 
   if (!blog) return response.status(404).end();
