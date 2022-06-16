@@ -23,6 +23,8 @@ loginRouter.post("/", async (request, response) => {
 
   if (await bcrypt.compare(password, user.passwordHash))
     response.json({
+      username: user.username,
+      name: user.name,
       token: jwt.sign(
         {
           id: user._id,
