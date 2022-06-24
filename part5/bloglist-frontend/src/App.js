@@ -1,13 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Message from "./components/Message";
+import BlogForm from "./components/BlogForm";
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [notif, setNotif] = useState(null);
+
+  const blogFormRef = useRef();
 
   useEffect(() => {
     setUser(JSON.parse(window.localStorage.getItem("user")));
@@ -64,6 +68,8 @@ const App = () => {
       });
 
       showNotif(`Blog '${newBlog.title}' by ${newBlog.author} added`);
+
+      blogFormRef.current.toggleVisibility();
     } catch (err) {
       showNotif("An error occured while adding new blog", "error");
     }
@@ -79,28 +85,11 @@ const App = () => {
           <p>
             {user.name} logged in <button onClick={logout}>Log out</button>
           </p>
-          <h2>Create new blog</h2>
-          <form onSubmit={createBlog}>
-            <label>
-              Title:
-              <input type="text" name="title" />
-            </label>
-            <br />
 
-            <label>
-              Author:
-              <input type="text" name="author" />
-            </label>
-            <br />
+          <Togglable label="create new blog" ref={blogFormRef}>
+            <BlogForm handleSubmit={createBlog} />
+          </Togglable>
 
-            <label>
-              URL:
-              <input type="url" name="url" />
-            </label>
-            <br />
-
-            <button type="submit">Create</button>
-          </form>
           <h2>Created blogs</h2>
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
