@@ -49,27 +49,12 @@ const App = () => {
     window.localStorage.clear();
   };
 
-  const createBlog = async (event) => {
-    event.preventDefault();
-
-    const controls = ["title", "author", "url"].map(
-      (name) => event.target.elements[name]
-    );
-
-    const newBlog = Object.fromEntries(
-      controls.map((control) => [control.name, control.value])
-    );
-
+  const createBlog = async (newBlog) => {
     try {
       setBlogs(blogs.concat(await blogService.create(newBlog, user.token)));
-
-      controls.forEach((control) => {
-        control.value = "";
-      });
-
       showNotif(`Blog '${newBlog.title}' by ${newBlog.author} added`);
-
       blogFormRef.current.toggleVisibility();
+      return true;
     } catch (err) {
       showNotif("An error occured while adding new blog", "error");
     }
@@ -87,7 +72,7 @@ const App = () => {
           </p>
 
           <Togglable label="create new blog" ref={blogFormRef}>
-            <BlogForm handleSubmit={createBlog} />
+            <BlogForm createBlog={createBlog} />
           </Togglable>
 
           <h2>Created blogs</h2>

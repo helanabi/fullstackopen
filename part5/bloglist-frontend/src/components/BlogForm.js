@@ -1,4 +1,22 @@
-const BlogForm = ({ handleSubmit }) => {
+const BlogForm = ({ createBlog }) => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const controls = ["title", "author", "url"].map(
+      (name) => event.target.elements[name]
+    );
+
+    const newBlog = Object.fromEntries(
+      controls.map((control) => [control.name, control.value])
+    );
+
+    if (await createBlog(newBlog)) {
+      controls.forEach((control) => {
+        control.value = "";
+      });
+    }
+  };
+
   return (
     <div>
       <h2>Create new blog</h2>
