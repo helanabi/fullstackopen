@@ -51,12 +51,27 @@ const App = () => {
 
   const createBlog = async (newBlog) => {
     try {
-      setBlogs(blogs.concat(await blogService.create(newBlog, user.token)));
+      const returnedBlog = await blogService.create(newBlog, user.token);
+
+      returnedBlog.user = {
+        id: returnedBlog.user,
+        name: user.name,
+        username: user.username,
+      };
+
+      setBlogs(blogs.concat(returnedBlog));
       showNotif(`Blog '${newBlog.title}' by ${newBlog.author} added`);
       blogFormRef.current.toggleVisibility();
       return true;
     } catch (err) {
       showNotif("An error occured while adding new blog", "error");
+    }
+  };
+
+  const handleRemove = async (blogToDelete) => {
+    if (window.confirm(`Remove blog '${blogToDelete.title}'?`)) {
+      await blogService.remove(blogToDelete.id, user.token);
+      setBlogs(blogs.filter((blog) => blog.id !== blogToDelete.id));
     }
   };
 
@@ -79,7 +94,12 @@ const App = () => {
           {blogs
             .sort((b1, b2) => b1.likes - b2.likes)
             .map((blog) => (
-              <Blog key={blog.id} initialBlog={blog} />
+              <Blog
+                key={blog.id}
+                initialBlog={blog}
+                removable={blog.user.username === user.username}
+                handleRemove={handleRemove}
+              />
             ))}
         </div>
       ) : (
