@@ -22,11 +22,9 @@ const Blog = ({ initialBlog, removable, handleRemove }) => {
     );
   };
 
-  console.log(blog.user.username, removable);
-
   return (
     <div style={blogStyle}>
-      {blog.title}{" "}
+      {blog.title} {blog.author}{" "}
       <button onClick={() => setExpand(!expand)}>
         {expand ? "hide" : "show"}
       </button>
@@ -36,7 +34,7 @@ const Blog = ({ initialBlog, removable, handleRemove }) => {
           <div>
             likes {blog.likes} <button onClick={handleLike}>like</button>
           </div>
-          <div>{blog.author}</div>
+          <div>{blog.user.name}</div>
           {removable && (
             <div>
               <button onClick={() => handleRemove(blog)}>remove</button>
