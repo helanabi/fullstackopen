@@ -24,15 +24,37 @@ test("Render title and author but not url nor likes", () => {
 });
 
 test("Show url and likes when the button is clicked", async () => {
-  const user = userEvent.setup();
-
   render(
     <Blog initialBlog={blog} removable={false} handleRemove={() => null} />
   );
 
+  const user = userEvent.setup();
   const button = screen.getByText("show");
   await user.click(button);
 
-  screen.getByText(blog.url);
+  screen.getByText("https://www.example.com");
   screen.getByText("likes", { exact: false });
+});
+
+test("Call event handler twice, when like button is pressed twice", async () => {
+  const handler = jest.fn();
+
+  render(
+    <Blog
+      initialBlog={blog}
+      removable={false}
+      handleRemove={() => null}
+      update={handler}
+    />
+  );
+
+  const user = userEvent.setup();
+  const showButton = screen.getByText("show");
+
+  await user.click(showButton);
+  const likeButton = screen.getByText("like");
+  await user.click(likeButton);
+  await user.click(likeButton);
+
+  expect(handler.mock.calls).toHaveLength(2);
 });

@@ -1,7 +1,6 @@
 import { useState } from "react";
-import blogService from "../services/blogs";
 
-const Blog = ({ initialBlog, removable, handleRemove }) => {
+const Blog = ({ initialBlog, removable, handleRemove, update }) => {
   const [expand, setExpand] = useState(false);
   const [blog, setBlog] = useState(initialBlog);
 
@@ -13,13 +12,17 @@ const Blog = ({ initialBlog, removable, handleRemove }) => {
   };
 
   const handleLike = async () => {
-    setBlog(
-      await blogService.update(blog.id, {
-        ...blog,
-        likes: blog.likes + 1,
-        user: blog.user.id,
-      })
-    );
+    const newBlog = {
+      ...blog,
+      likes: blog.likes + 1,
+    };
+
+    await update(blog.id, {
+      ...newBlog,
+      user: blog.user.id,
+    });
+
+    setBlog(newBlog);
   };
 
   return (

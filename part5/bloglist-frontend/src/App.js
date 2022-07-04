@@ -99,6 +99,7 @@ const App = () => {
                 initialBlog={blog}
                 removable={blog.user.username === user.username}
                 handleRemove={handleRemove}
+                update={blogService.update}
               />
             ))}
         </div>
