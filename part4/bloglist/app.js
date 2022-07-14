@@ -7,6 +7,7 @@ const blogRouter = require("./controllers/blogs");
 const middleware = require("./utils/middleware");
 const userRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
+const testingRouter = require("./controllers/testing");
 
 mongoose.connect(config.MONGODB_URI);
 
@@ -18,6 +19,9 @@ app.use(middleware.tokenExtractor);
 app.use("/api/blogs", middleware.userExtractor, blogRouter);
 app.use("/api/users", userRouter);
 app.use("/api/login", loginRouter);
+
+if (config.NODE_ENV === "testing") app.use("/api/testing", testingRouter);
+
 app.use(middleware.errorHandler);
 
 module.exports = app;

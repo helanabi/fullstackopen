@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=development nodemon index.js",
-    "test": "NODE_ENV=testing jest --verbose --runInBand"
+    "test": "NODE_ENV=testing jest --verbose --runInBand",
+    "start-testing": "NODE_ENV=testing node index.js"
   },
   "author": "Hassan El annabi",
   "license": "ISC",
