@@ -6,6 +6,11 @@ describe("Blog app", function () {
       name: "Test User",
       password: "sekret",
     });
+    cy.request("POST", "http://localhost:3003/api/users", {
+      username: "altuser",
+      name: "Alternate User",
+      password: "sekret",
+    });
     cy.visit("http://localhost:3000");
   });
 
@@ -55,27 +60,52 @@ describe("Blog app", function () {
       cy.contains("Test Blog Nobody");
     });
 
-    it("Users can like a blog", function () {
-      const token = JSON.parse(localStorage.getItem("user")).token;
-      cy.request({
-        method: "POST",
-        url: "http://localhost:3003/api/blogs",
-        body: {
-          title: "Test Blog",
-          author: "Nobody",
-          url: "http://www/example.com",
-        },
-        headers: {
-          Authorization: `bearer ${token}`,
-        },
+    describe("A blog exists", function () {
+      beforeEach(function () {
+        const token = JSON.parse(localStorage.getItem("user")).token;
+        cy.request({
+          method: "POST",
+          url: "http://localhost:3003/api/blogs",
+          body: {
+            title: "Test Blog",
+            author: "Nobody",
+            url: "http://www/example.com",
+          },
+          headers: {
+            Authorization: `bearer ${token}`,
+          },
+        });
+        cy.visit("http://localhost:3000");
       });
-      cy.contains("Test Blog Nobody").contains("show").click();
-      cy.contains("Test Blog Nobody")
-        .contains("likes 0")
-        .contains("like")
-        .click();
 
-      cy.contains("Test Blog Nobody").contains("likes 1");
+      it("Users can like a blog", function () {
+        cy.contains("Test Blog Nobody").contains("show").click();
+        cy.contains("Test Blog Nobody")
+          .contains("likes 0")
+          .contains("like")
+          .click();
+
+        cy.contains("Test Blog Nobody").contains("likes 1");
+      });
+
+      it("Users can delete their blogs", function () {
+        cy.contains("Test Blog Nobody").contains("show").click();
+        cy.contains("Test Blog Nobody").contains("remove").click();
+        cy.get("body").should("not.contain", "Test Blog Nobody");
+      });
+
+      it("Users cannot delete others' blogs", function () {
+        cy.request("POST", "http://localhost:3003/api/login", {
+          username: "altuser",
+          password: "sekret",
+        }).then((res) => {
+          localStorage.setItem("user", JSON.stringify(res.body));
+          cy.visit("http://localhost:3000");
+        });
+
+        cy.contains("Test Blog Nobody").contains("show").click();
+        cy.contains("Test Blog Nobody").should("not.contain", "remove");
+      });
     });
   });
 });
