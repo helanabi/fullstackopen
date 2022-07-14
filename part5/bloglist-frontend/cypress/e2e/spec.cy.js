@@ -62,18 +62,10 @@ describe("Blog app", function () {
 
     describe("A blog exists", function () {
       beforeEach(function () {
-        const token = JSON.parse(localStorage.getItem("user")).token;
-        cy.request({
-          method: "POST",
-          url: "http://localhost:3003/api/blogs",
-          body: {
-            title: "Test Blog",
-            author: "Nobody",
-            url: "http://www/example.com",
-          },
-          headers: {
-            Authorization: `bearer ${token}`,
-          },
+        cy.addBlog({
+          title: "Test Blog",
+          author: "Nobody",
+          url: "http://www/example.com",
         });
         cy.visit("http://localhost:3000");
       });
@@ -105,6 +97,18 @@ describe("Blog app", function () {
 
         cy.contains("Test Blog Nobody").contains("show").click();
         cy.contains("Test Blog Nobody").should("not.contain", "remove");
+      });
+
+      it("Blogs are ordered by numbers of likes in descending order", function () {
+        cy.addBlog({
+          title: "Test Blog with 10 likes",
+          author: "Nobody",
+          url: "http://www.example.com",
+          likes: 10,
+        });
+
+        cy.get(".blog").eq(0).should("contain", "Test Blog with 10 likes");
+        cy.get(".blog").eq(1).should("contain", "Test Blog");
       });
     });
   });

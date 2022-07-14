@@ -26,7 +26,7 @@ const Blog = ({ initialBlog, removable, handleRemove, update }) => {
   };
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="blog">
       {blog.title} {blog.author}{" "}
       <button onClick={() => setExpand(!expand)}>
         {expand ? "hide" : "show"}
