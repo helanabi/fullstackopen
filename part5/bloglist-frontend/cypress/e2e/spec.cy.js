@@ -54,5 +54,28 @@ describe("Blog app", function () {
 
       cy.contains("Test Blog Nobody");
     });
+
+    it("Users can like a blog", function () {
+      const token = JSON.parse(localStorage.getItem("user")).token;
+      cy.request({
+        method: "POST",
+        url: "http://localhost:3003/api/blogs",
+        body: {
+          title: "Test Blog",
+          author: "Nobody",
+          url: "http://www/example.com",
+        },
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      });
+      cy.contains("Test Blog Nobody").contains("show").click();
+      cy.contains("Test Blog Nobody")
+        .contains("likes 0")
+        .contains("like")
+        .click();
+
+      cy.contains("Test Blog Nobody").contains("likes 1");
+    });
   });
 });
